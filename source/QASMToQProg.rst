@@ -20,7 +20,7 @@ QPanda 2提供了QASM文件转换工具接口 ``convert_qasm_to_qprog(std::strin
 
     .. code-block:: c
     
-        #include "QPanda.h"
+        	#include "QPanda.h"
 		USING_QPANDA
 
 		int main()
@@ -50,7 +50,7 @@ QPanda 2提供了QASM文件转换工具接口 ``convert_qasm_to_qprog(std::strin
 			std::cout << convert_qprog_to_qasm(prog, machine) << std::endl;
 			destroyQuantumMachine(machine);
 			return 0;
-}
+		}
 
 
 具体步骤如下:

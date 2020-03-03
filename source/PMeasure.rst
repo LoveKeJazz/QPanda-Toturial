@@ -28,7 +28,7 @@ QPanda2提供了三种获得PMeasure结果的方式，其中有 ``probRunList`` 
                 << CNOT(qubits[0], qubits[1])
                 << CNOT(qubits[1], qubits[2])
                 << CNOT(qubits[2], qubits[3]);
-        auto result = probRunDict(prog, qubits， 3);
+        auto result = probRunDict(prog, qubits, 3);
 
 第一个参数是量子程序， 第二个参数是 ``QVec`` 它指定了我们关注的量子比特。
 第三个参的值为-1时，是指我们以第二个参数中所有的量子比特作为目标，当其值不为-1时，则表示我们关注 ``QVec`` 中的前几个。

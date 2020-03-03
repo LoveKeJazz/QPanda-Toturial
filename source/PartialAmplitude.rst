@@ -44,11 +44,11 @@ QPanda2中设计了 ``PartialAmplitudeQVM`` 类用于运行部分振幅模拟量
         ...
         machine->run(prog);
 
-构建还可以采用另一种方式，即读取QRunes文件形式，例如
+构建还可以采用另一种方式，即读取OriginIR语法文件形式，例如
 
     .. code-block:: c
 
-        machine->run("D:\\QRunes");
+        machine->run("D:\\OriginIR");
 
 最后调用计算接口，我们设计多种返回值的接口用于满足不同的计算需求，具体见示例所述：
 

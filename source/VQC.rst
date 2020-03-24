@@ -81,7 +81,7 @@
         QProg prog;
         prog << circuit;
 
-        std::cout << transformQProgToQRunes(prog, machine) << std::endl << std::endl;
+        std::cout << convert_qprog_to_originir(prog, machine) << std::endl << std::endl;
 
         auto gates = vqc.get_var_in_which_gate(x);
 
@@ -94,7 +94,7 @@
         QProg prog2;
         prog2 << circuit2;
 
-        std::cout << transformQProgToQRunes(prog2,machine) << std::endl;
+        std::cout << convert_qprog_to_originir(prog2,machine) << std::endl;
 
         return 0;
     }

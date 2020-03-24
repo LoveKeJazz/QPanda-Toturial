@@ -206,7 +206,7 @@ control的作用是复制当前的量子逻辑门，并给复制的量子逻辑�
 接着，调用CreateEmptyQProg构建一个量子程序prog，然后我们可以通过 << 操作符把量子逻辑门插入到prog中。最后调用qprobRunTupleList概率测量运行接口，就可以得到计算结果了。
 
     .. code-block:: c
-
+    
         #include "QPanda.h"
         using namespace QPanda;
 

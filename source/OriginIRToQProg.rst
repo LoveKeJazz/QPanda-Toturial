@@ -10,7 +10,7 @@ OriginIR
 
 OriginIR的书写格式规范与例程可以参考量子程序转化OriginIR模块中的 :ref:`OriginIR介绍` 部分。
 
-QPanda 2提供了OriginIR文件转换工具接口 ``transformOriginIRToQProg(std::string filePath, QuantumMachine* qm)`` 该接口使用非常简单，具体可参考下方示例程序。
+QPanda 2提供了OriginIR文件转换工具接口 ``convert_originir_to_qprog(std::string file_path, QuantumMachine *qm)`` 该接口使用非常简单，具体可参考下方示例程序。
 
 实例
 >>>>>>>
@@ -39,21 +39,21 @@ QPanda 2提供了OriginIR文件转换工具接口 ``transformOriginIRToQProg(std
 		        MEASURE q[0], c[0]
 		        QIF c[0]
 		        H q[1]
-                	ELSE
+                ELSE
 		        H q[2]
 		        RZ q[2], (2.356194)
 		        CU q[2], q[3], (3.141593, 4.712389, 1.570796, -1.570796)
 		        CNOT q[2], q[1]
-                	ENDQIF
+                ENDQIF
 		        )";
                 
 	        os.close();
 
 	        auto machine = initQuantumMachine(QMachineType::CPU);
-	        QProg prog = QPanda::transformOriginIRToQProg(filename, machine);
+	        QProg prog = convert_originir_to_qprog(filename, machine);
 
 	        std::cout <<
-		        transformQProgToOriginIR(prog, machine)
+		        convert_qprog_to_originir(prog, machine)
 		        << std::endl;
 
 	        destroyQuantumMachine(machine);
@@ -67,9 +67,9 @@ QPanda 2提供了OriginIR文件转换工具接口 ``transformOriginIRToQProg(std
  
  - 接着在主程序中用 ``initQuantumMachine()`` 初始化一个量子虚拟机对象，用于管理后续一系列行为
 
- - 然后调用 ``transformOriginIRToQProg()`` 转化
+ - 然后调用 ``convert_originir_to_qprog()`` 转化
  
- - 最后调用 ``transformQProgToOriginIR()`` 接口，把量子程序转为OriginIR，通过比较输入和生成的OriginIR是否相同，判断OriginIR是否正确转换成量子程序，并且用 ``destroyQuantumMachine()`` 释放系统资源
+ - 最后调用 ``convert_qprog_to_originir()`` 接口，把量子程序转为OriginIR，通过比较输入和生成的OriginIR是否相同，判断OriginIR是否正确转换成量子程序，并且用 ``destroyQuantumMachine()`` 释放系统资源
 
     
 运行结果如下：
@@ -95,5 +95,7 @@ QPanda 2提供了OriginIR文件转换工具接口 ``transformOriginIRToQProg(std
         CNOT q[2],q[1]
         ENDQIF
 
-   .. note:: 对于暂不支持的操作类型，可能会在OriginIR转化成量子程序的过程中发生错误。
+.. note:: 对于暂不支持的操作类型，可能会在OriginIR转化成量子程序的过程中发生错误。
 
+.. warning:: 
+        新增接口 ``convert_originir_to_qprog()`` ，与老版本接口 ``transformOriginIRToQProg()`` 功能相同。

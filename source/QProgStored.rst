@@ -34,7 +34,7 @@ QPanda2还提供了封装好的接口来实现量子程序序列化，上述的�
 
     .. code-block:: c
           
-        auto instructions = transformQProgToBinary(prog, qvm);
+        auto instructions = convert_qprog_to_binary(prog, qvm);
 
 此外，QPanda2还提供了将序列化后的量子程序存储到文件中的方法， 现在讲上述量子程序以二进制的方式存储到 ``QProg.dat`` 文件中， 可以调用 ``QProgStored``
 类中的方法
@@ -49,7 +49,7 @@ QPanda2还提供了封装好的接口来实现量子程序序列化，上述的�
 
     .. code-block:: c
           
-        storeQProgInBinary(prog, qvm, "QProg.dat");
+        convert_qprog_to_binary(prog, qvm, "QProg.dat");
 
 实例
 --------------
@@ -61,9 +61,9 @@ QPanda2还提供了封装好的接口来实现量子程序序列化，上述的�
 
         int main(void)
         {
-            auto qvm_store = initQuantumMachine();
-            auto qubits = qvm_store->allocateQubits(4);
-            auto cbits = qvm_store->allocateCBits(4);
+            auto qvm = initQuantumMachine();
+            auto qubits = qvm->allocateQubits(4);
+            auto cbits = qvm->allocateCBits(4);
             cbits[0].setValue(0);
 
             QProg prog;
@@ -71,13 +71,13 @@ QPanda2还提供了封装好的接口来实现量子程序序列化，上述的�
                     << CNOT(qubits[1], qubits[2])
                     << CNOT(qubits[2], qubits[3])
                     ;
-            auto data = transformQProgToBinary(prog, qvm_store);
+            auto data = convert_qprog_to_binary(prog, qvm);
             auto base64_data = Base64::encode(data.data(), data.size()); // 将得到的二进制数据以base64的方式编码
             std::string data_str(base64_data.begin(), base64_data.end());
             std::cout << data_str << std::endl;
 
-            qvm_store->finalize();
-            delete qvm_store;
+ 	        destroyQuantumMachine(qvm);
+
             return 0;
         }
         
@@ -88,3 +88,7 @@ QPanda2还提供了封装好的接口来实现量子程序序列化，上述的�
         AAAAAAQAAAAEAAAABAAAAA4AAQAAAAAAJAACAAAAAQAkAAMAAQACACQABAACAAMA    
     
 .. note:: 二进制数据不能直接输出，以base64的编码格式编码，得到相应的字符串
+
+
+.. warning:: 
+        新增接口 ``convert_qprog_to_binary()`` ，与老版本接口 ``transformQProgToBinary()`` 功能相同。

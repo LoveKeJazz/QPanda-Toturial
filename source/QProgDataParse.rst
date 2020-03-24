@@ -48,7 +48,7 @@
 
         QVec qubits_parse;
         std::vector<ClassicalCondition> cbits_parse;
-        transformBinaryDataToQProg(qvm, data, qubits_parse, cbits_parse, parseProg);
+        convert_binary_data_to_qprog(qvm, data, qubits_parse, cbits_parse, parseProg);
 
 实例
 ------------
@@ -68,7 +68,7 @@
 
             std::string data_str = "AAAAAAQAAAAEAAAABAAAAA4AAQAAAAAAJAACAAAAAQAkAAMAAQACACQABAACAAMA";
             auto data = Base64::decode(data_str.data(), data_str.size());
-            transformBinaryDataToQProg(qvm, data, qubits_parse, cbits_parse, parseProg);
+            convert_binary_data_to_qprog(qvm, data, qubits_parse, cbits_parse, parseProg);
 
             auto result_parse = probRunTupleList(parseProg, qubits_parse);
             for (auto &val : result_parse)
@@ -76,8 +76,7 @@
                 std::cout << val.first << ", " << val.second << std::endl;
             }
 
-            qvm->finalize();
-            delete qvm;
+            destroyQuantumMachine(qvm);
             return 0;
         }
 
@@ -106,7 +105,5 @@
 
 
 .. warning:: 
-        新版本中接口名有所调整，旧接口 ``binaryQProgDataParse()`` 将由 ``transformBinaryDataToQProg()`` 替代。\
-      
-        ``binaryQProgDataParse()`` 将于下版本去除，请读者知悉。
+        新增接口 ``convert_binary_data_to_qprog()`` ，与老版本接口 ``transformBinaryDataToQProg()`` 功能相同。
 

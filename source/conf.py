@@ -12,8 +12,8 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
+import os
+import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
 
@@ -182,3 +182,19 @@ epub_title = project
 
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
+
+
+
+# Specify the path to Doxyrest extensions for Sphinx:
+
+sys.path.insert(1, os.path.abspath('sphinx'))
+
+# Add Doxyrest extensions ``doxyrest`` and ``cpplexer``:
+
+extensions += ['doxyrest', 'cpplexer']
+
+# If you used INTRO_FILE in 'doxyrest-config.lua' to force-include it
+# into 'index.rst', exclude it from the Sphinx input (otherwise, there
+# will be build warnings):
+
+exclude_patterns += ['page_index.rst']

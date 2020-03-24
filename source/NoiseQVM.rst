@@ -34,10 +34,10 @@ DEPHASING_KRAUS_OPERATOR是量子比特的退相位过程噪声模型，它的kr
 
 需要一个噪声参数。
 
-DECOHERENCE_KRAUS_OPERATOR_P1_P2
+DECOHERENCE_KRAUS_OPERATOR
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-DECOHERENCE_KRAUS_OPERATOR_P1_P2是退相干噪声模型，为上述两种噪声模型的综合，他们的关系如下所示：
+DECOHERENCE_KRAUS_OPERATOR是退相干噪声模型，为上述两种噪声模型的综合，他们的关系如下所示：
 
 :math:`P_{damping} = 1 - e^{-\frac{t_{gate}}{T_1}}, P_{dephasing} = 0.5 \times (1 - e^{-(\frac{t_{gate}}{T_2} - \frac{t_{gate}}{2T_1})})`
 
@@ -45,7 +45,7 @@ DECOHERENCE_KRAUS_OPERATOR_P1_P2是退相干噪声模型，为上述两种噪声
 
 :math:`K_3 = K_{2_{damping}}K_{1_{dephasing}}, K_4 = K_{2_{damping}}K_{2_{dephasing}}`
 
-需要两个噪声参数。
+需要三个噪声参数。
 
 BITFLIP_KRAUS_OPERATOR
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -98,8 +98,10 @@ PHASE_DAMPING_OPRATOR是相位阻尼噪声模型，它的kraus算符和表示方
             DEPHASING_KRAUS_OPERATOR,
             DECOHERENCE_KRAUS_OPERATOR_P1_P2,
             BITFLIP_KRAUS_OPERATOR,
+            DEPOLARIZING_KRAUS_OPERATOR,
             BIT_PHASE_FLIP_OPRATOR,
-            PHASE_DAMPING_OPRATOR
+            PHASE_DAMPING_OPRATOR,
+            DECOHERENCE_KRAUS_OPERATOR,
         };
 
 设置量子逻辑门的接口如下：
@@ -115,8 +117,8 @@ PHASE_DAMPING_OPRATOR是相位阻尼噪声模型，它的kraus算符和表示方
      .. code-block:: c
 
         NoiseQVM qvm;
-        qvm.set_noise_model(NOISE_MODEL::DECOHERENCE_KRAUS_OPERATOR, GateType::RX_GATE, { 10, 2.0, 0.03 });
-        qvm.set_noise_model(NOISE_MODEL::DECOHERENCE_KRAUS_OPERATOR, GateType::RY_GATE, { 10, 2.0, 0.03 });
+        qvm.set_noise_model(NOISE_MODEL::DECOHERENCE_KRAUS_OPERATOR, GateType::RX_GATE, { 5.0, 2.0, 0.03 }); // T1: 5.0, T2: 2.0, t_gate: 0.03
+        qvm.set_noise_model(NOISE_MODEL::DECOHERENCE_KRAUS_OPERATOR, GateType::RY_GATE, { 5.0, 2.0, 0.03 });
         qvm.set_noise_model(NOISE_MODEL::DEPHASING_KRAUS_OPERATOR, GateType::CNOT_GATE, { 0.3 });
         qvm.init();
 
@@ -130,7 +132,8 @@ PHASE_DAMPING_OPRATOR是相位阻尼噪声模型，它的kraus算符和表示方
         int main(void)
         {
             NoiseQVM qvm;
-            qvm.set_noise_model(NOISE_MODEL::DECOHERENCE_KRAUS_OPERATOR, GateType::HADAMARD_GATE, { 10, 2.0, 0.03 });
+            // T1: 5.0, T2: 2.0, t_gate: 0.03
+            qvm.set_noise_model(NOISE_MODEL::DECOHERENCE_KRAUS_OPERATOR, GateType::HADAMARD_GATE, { 5.0, 2.0, 0.03 });
             qvm.set_noise_model(NOISE_MODEL::DEPHASING_KRAUS_OPERATOR, GateType::CPHASE_GATE, { 0.1 });
             qvm.init();
 
@@ -169,19 +172,20 @@ PHASE_DAMPING_OPRATOR是相位阻尼噪声模型，它的kraus算符和表示方
 
     .. code-block:: c
 
-        0000 : 65
-        0001 : 75
-        0010 : 62
-        0011 : 59
-        0100 : 48
-        0101 : 54
-        0110 : 58
+        0000 : 74
+        0001 : 63
+        0010 : 51
+        0011 : 46
+        0100 : 53
+        0101 : 64
+        0110 : 69
         0111 : 70
-        1000 : 51
+        1000 : 67
         1001 : 59
-        1010 : 61
-        1011 : 69
-        1100 : 66
-        1101 : 57
-        1110 : 60
-        1111 : 86
+        1010 : 64
+        1011 : 74
+        1100 : 62
+        1101 : 60
+        1110 : 71
+        1111 : 53
+

@@ -11,7 +11,7 @@ QASM介绍
 >>>>>>>>>>>>>>>
 ----
 
-QASM(Quantum Assembly Language)是IBM公司提出的量子汇编语言，与 :ref:`QRunes介绍` 中的语法规则类似，一段QASM代码如下所示：
+QASM(Quantum Assembly Language)是IBM公司提出的量子汇编语言，与 :ref:`OriginIR介绍` 中的语法规则类似，一段QASM代码如下所示：
 
     :: 
 
@@ -36,10 +36,10 @@ QASM(Quantum Assembly Language)是IBM公司提出的量子汇编语言，与 :re
         measure q[0] -> c[0];
 
 
-需要注意的是，QASM的语法格式与QRunes形相似而神不同，主要区别有以下几点:
+需要注意的是，QASM的语法格式与OriginIR形相似而神不同，主要区别有以下几点:
 
- - QRunes对于需要进行转置共轭操作的量子逻辑门与量子线路，需要将目标置于DAGGER与ENDAGGER语句之间，而QASM会直接进行转化。
- - QRunes支持对量子逻辑门与量子线路施加控制操作，而QASM不支持，在对量子程序转化QASM指令集之前，会对其中包含的控制操作进行分解。
+ - OriginIR对于需要进行转置共轭操作的量子逻辑门与量子线路，需要将目标置于DAGGER与ENDAGGER语句之间，而QASM会直接进行转化。
+ - OriginIR支持对量子逻辑门与量子线路施加控制操作，而QASM不支持，在对量子程序转化QASM指令集之前，会对其中包含的控制操作进行分解。
 
 
 关于QASM更多详细信息的介绍、使用与体验请参考 `IBM Q Experience量子云平台`_

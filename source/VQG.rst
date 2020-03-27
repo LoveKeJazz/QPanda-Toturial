@@ -89,7 +89,7 @@ VariationalQuantumGate_CZ     VQG_CZ
         QProg prog;
         prog << circuit;
 
-            std::cout << transformQProgToQRunes(prog, machine) << std::endl << std::endl;
+        std::cout << convert_qprog_to_originir(prog, machine) << std::endl << std::endl;
 
         m1(0, 0) = 3;
         m2(0, 0) = 4;
@@ -101,7 +101,7 @@ VariationalQuantumGate_CZ     VQG_CZ
         QProg prog2;
         prog2 << circuit2;
 
-        std::cout << transformQProgToQRunes(prog2,machine) << std::endl;
+        std::cout << convert_qprog_to_originir(prog2,machine) << std::endl;
 
         return 0;
     }

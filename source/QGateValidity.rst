@@ -51,7 +51,7 @@
 
     .. code-block:: c
           
-        auto single_gate_type = validateSingleQGateType(double_gate， valid_double_gate);
+        auto single_gate_type = validateSingleQGateType(double_gate, valid_double_gate);
 
 ``DoubleGateTypeValidator`` 是验证双量子逻辑门有效性的工具类，使用方式如下：
 
@@ -68,7 +68,7 @@
 
     .. code-block:: c
           
-        auto double_gate_type = validateDoubleQGateType(double_gate， valid_double_gate);
+        auto double_gate_type = validateDoubleQGateType(double_gate, valid_double_gate);
 
 实例
 ------------

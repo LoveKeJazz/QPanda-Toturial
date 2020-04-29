@@ -44,12 +44,6 @@ QPanda2中设计了 ``PartialAmplitudeQVM`` 类用于运行部分振幅模拟量
         ...
         machine->run(prog);
 
-构建还可以采用另一种方式，即读取OriginIR语法文件形式，例如
-
-    .. code-block:: c
-
-        machine->run("D:\\OriginIR");
-
 最后调用计算接口，我们设计多种返回值的接口用于满足不同的计算需求，具体见示例所述：
 
 实例
@@ -89,121 +83,43 @@ QPanda2中设计了 ``PartialAmplitudeQVM`` 类用于运行部分振幅模拟量
                  << CR(qlist[2], qlist[7], PI / 2);
                 
             machine->run(prog);
-            auto res = machine->getQState();
-            cout << res["0000000000"] << endl;
-            cout << res["0000000001"] << endl;
 
-上述程序使用的接口为getQState()，即获取量子态所有分量的振幅，计算结果如下
+接口介绍：
 
-    .. code-block:: c
-
-        (-0.00647209,-0.00647209)
-        (8.5444e-18,-0.00915291)
-        ...
-
-若使用其他接口：
-    - ``PMeasure(std::string)`` ,输入的参数表示获取测量所有比特构成量子态的概率的结果集的前多少项，比如如下例子，我们获取所有量子态的概率分布结果的前6项，程序运行如下：
+    - ``PMeasure_bin_index(std::string)`` ,输入的参数表示指定需要测量的量子态二进制形式，使用示例如下：
 
         .. code-block:: c
 
-            auto res = machine->PMeasure("6");
-            for (auto val :res)
-            {
-                std::cout << val.first << " : " << val.second << std::endl;
-            }
+            auto res = machine->PMeasure_bin_index("0000000001");
+            std::cout << res << std::endl;
 
-        结果输出如下，每个结果的序号表示量子态的下标，后面的值表示概率：
+        结果输出如下，表示目标量子态的振幅值：
 
         .. code-block:: c
 
-            0 : 8.37758e-05
-            1 : 8.37758e-05
-            2 : 8.37758e-05
-            3 : 8.37758e-05
-            4 : 0.000488281
-            5 : 0.000488281
+            (5.1648e-11,-0.00915291)
 
-    - ``PMeasure(QVec,std::string)`` ,输入的第一个参数表示选取哪几个量子比特构成的量子态的概率，第二个参数表示选取结果的前多少项，使用示例如下：
+    - ``PMeasure_dec_index(std::string)`` ,输入的参数表示指定需要测量的量子态十进制下标形式，使用示例
 
         .. code-block:: c
 
-            QVec qv = { qlist[1],qlist[2],qlist[3] ,qlist[4] ,qlist[5] ,qlist[6] ,qlist[7] ,qlist[8],qlist[9] };
-            auto res2 = machine->PMeasure(qv, "6");
-
-            for (auto val :res)
-            {
-                std::cout << val.first << " : " << val.second << std::endl;
-            }
-
-        结果输出如下，每个结果的序号表示量子态的下标，后面的值表示概率：
-
-        .. code-block:: c
-
-            0 : 0.000167552
-            1 : 0.000167552
-            2 : 0.000976562
-            3 : 0.000976562
-            4 : 0.000976562
-            5 : 0.000976562
-
-    - ``getProbDict(qvec,std::string)`` ,输入的第一个参数表示选取哪几个量子比特构成的量子态的概率，第二个参数表示选取结果的前多少项，使用示例如下：
-
-        .. code-block:: c
-
-            QVec qvec;
-            for_each(qlist.begin(), qlist.end(), [&](Qubit *val) { qvec.emplace_back(val); });
-
-            auto res = machine->getProbDict(qvec,6);
-            for (auto val :res)
-            {
-                std::cout << val.first << " : " << val.second << endl;
-            }
-
-        结果输出如下，每个结果的前半部分表示量子态的二进制形式，后面的值表示概率：
-
-        .. code-block:: c
-
-            0000000000 : 8.37758e-05
-            0000000001 : 8.37758e-05
-            0000000010 : 8.37758e-05
-            0000000011 : 8.37758e-05
-            0000000100 : 0.000488281
-            0000000101 : 0.000488281
-
-    - ``pMeasureBinIndex(std::string)`` ,输入的参数表示指定需要测量的量子态二进制形式，使用示例如下：
-
-        .. code-block:: c
-
-            auto res = machine->pMeasureBinIndex("0000000001");
+            auto res = machine->PMeasure_dec_index("1");
             std::cout << res << std::endl;
 
         结果输出如下，表示目标量子态的概率值：
 
         .. code-block:: c
 
-            8.37758e-05
+            (5.1648e-11,-0.00915291)
 
-    - ``pMeasureDecIndex(std::string)`` ,输入的参数表示指定需要测量的量子态十进制下标形式，使用示例
-
-        .. code-block:: c
-
-            auto res = machine->pMeasureBinIndex("1");
-            std::cout << res << std::endl;
-
-        结果输出如下，表示目标量子态的概率值：
+    - ``PMeasure_subset(std::vector<std::string>)`` ,输入的参数表示需要测量的量子态十进制下标形式构成的子集，使用示例如下：
 
         .. code-block:: c
 
-            8.37758e-05
+            std::vector<std::string> set = { "0","1","2" };
+            auto result = machine->PMeasure_subset(set);
 
-    - ``pMeasureSubset(QProg &, std::vector<std::string>)`` ,输入的第一个参数表示待运行的量子线路，第二个参数表示需要测量的量子态二进制下标形式构成的子集，使用示例如下：
-
-        .. code-block:: c
-
-            std::vector<std::string> set = { "0000000000","0000000001","0000000100" };
-            auto res = machine->PMeasureSubset(prog, set);
-
-            for (auto val : res)
+            for (auto val : result)
             {
                 std::cout << val.first << " : " << val.second << endl;
             }
@@ -212,11 +128,10 @@ QPanda2中设计了 ``PartialAmplitudeQVM`` 类用于运行部分振幅模拟量
 
         .. code-block:: c
 
-            0000000000 : 8.37758e-05
-            0000000001 : 8.37758e-05
-            0000000100 : 0.000488281
+            0 : (-0.00647209,-0.00647208)
+            1 : (5.1648e-11,-0.00915291)
+            2 : (-6.98492e-10,-0.00915291)
 
         .. warning::
 
-            1. 部分接口，比如 ``getQState()`` 、 ``PMeasure(std::string)`` 、 ``PMeasure(QVec,std::string)`` 、 ``pMeasureBinIndex(std::string)`` 以及 ``pMeasureDecIndex(std::string)`` 等会在后续的版本中舍弃。
-            2. 部分振幅虚拟机会保留 ``pMeasureSubset(QProg &, std::vector<std::string>)`` 接口。
+            部分旧的接口，比如 ``getQState()`` 、 ``PMeasure(std::string)`` 、 ``PMeasure(QVec,std::string)`` 、 ``pMeasureBinIndex(std::string)`` 以及 ``pMeasureDecIndex(std::string)`` 等已经弃用了。

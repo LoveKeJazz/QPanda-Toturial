@@ -10,7 +10,7 @@ OriginIR
 
 OriginIR的书写格式规范与例程可以参考量子程序转化OriginIR模块中的 :ref:`OriginIR介绍` 部分。
 
-QPanda 2提供了OriginIR文件转换工具接口 ``convert_originir_to_qprog(std::string file_path, QuantumMachine *qm)`` 该接口使用非常简单，具体可参考下方示例程序。
+QPanda 2提供了OriginIR文件转换工具接口 ``convert_originir_to_qprog()`` 该接口使用非常简单，具体可参考下方示例程序。
 
 实例
 >>>>>>>
@@ -50,10 +50,12 @@ QPanda 2提供了OriginIR文件转换工具接口 ``convert_originir_to_qprog(st
 	        os.close();
 
 	        auto machine = initQuantumMachine(QMachineType::CPU);
-	        QProg prog = convert_originir_to_qprog(filename, machine);
+            QVec out_qv;
+			std::vector<ClassicalCondition> out_cv;
+	        QProg out_prog = convert_originir_to_qprog(filename, machine, out_qv, out_cv);
 
 	        std::cout <<
-		        convert_qprog_to_originir(prog, machine)
+		        convert_qprog_to_originir(out_prog, machine)
 		        << std::endl;
 
 	        destroyQuantumMachine(machine);

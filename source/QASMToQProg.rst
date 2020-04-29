@@ -10,7 +10,7 @@ QASM介绍
 
 QASM的书写格式规范与例程可以参考量子程序转化QASM模块中的 :ref:`QASM介绍` 部分。
 
-QPanda 2提供了QASM文件转换工具接口 ``convert_qasm_to_qprog(std::string file_path, QuantumMachine *qvm)`` 该接口使用非常简单，具体可参考下方示例程序。
+QPanda 2提供了QASM文件转换工具接口 ``convert_qasm_to_qprog()`` 该接口使用非常简单，具体可参考下方示例程序。
 
 实例
 >>>>>>>
@@ -45,9 +45,12 @@ QPanda 2提供了QASM文件转换工具接口 ``convert_qasm_to_qprog(std::strin
 			os.close();
 
 			auto machine = initQuantumMachine(QMachineType::CPU);
-			QProg prog = convert_qasm_to_qprog(filename, machine);
+			
+			QVec out_qv;
+			std::vector<ClassicalCondition> out_cv;
+			QProg out_prog = convert_qasm_to_qprog(filename, machine, out_qv, out_cv);
 
-			std::cout << convert_qprog_to_qasm(prog, machine) << std::endl;
+			std::cout << convert_qprog_to_qasm(out_prog, machine) << std::endl;
 			destroyQuantumMachine(machine);
 			return 0;
 		}

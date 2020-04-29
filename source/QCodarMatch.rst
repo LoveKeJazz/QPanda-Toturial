@@ -26,7 +26,8 @@
 实例
 ---------------
 
-- 接口 ``topology_match``
+``topology_match`` 实例
+>>>>>>>>>>>>>>>>>>>>>>>>>
 
 .. code-block:: c
 
@@ -79,6 +80,19 @@
         delete qvm;
         return 0 ;
     }
+    
+具体步骤如下:
+
+ - 首先创建量子虚拟机、量子寄存器、经典寄存器
+ 
+ - 编写量子程序 ``srcprog`` ，对该量子程序进行概率测量得到结果 ``r1``
+ 
+ - 接着调用 ``topology_match()`` 对 ``srcprog`` 进行符合特定物理结构的线路映射，得到适配特定物理结构的量子程序 ``outprog``
+
+ - 对量子程序 ``outprog`` 进行概率测量得到结果 ``r2``
+ 
+ - 由于量子程序映射只是对原线路增加额外的 ``SWAP`` 操作，以适配物理拓扑结构，并不影响线路的结构。所以对比结果 ``r1`` 和 ``r2`` ，如果结果一致，则线路映射正确。
+
 
 
 运行结果如下:
@@ -103,7 +117,9 @@
     0
     0
 
-- 接口 ``qcodar_match``
+
+``qcodar_match`` 实例
+>>>>>>>>>>>>>>>>>>>>>>>>>
 
 .. code-block:: c
 
@@ -116,8 +132,8 @@
         qvm->init();
         auto q = qvm->allocateQubits(4);
         auto cv = qvm->allocateCBits(4);
-        QProg prog;
-        prog << CNOT(q[1], q[3])
+        QProg srcprog;
+        srcprog << CNOT(q[1], q[3])
             << RX(q[0], PI / 2)
             << CNOT(q[0], q[2])
             << CNOT(q[1], q[3])
@@ -131,16 +147,16 @@
             << CNOT(q[0], q[2])
             << H(q[0])
             << T(q[1])
-            <<RX(q[1], -PI/4)
+            << RX(q[1], -PI/4)
             << Y(q[2])
             << Z(q[1])
             ;
 
-        qvm->directlyRun(prog);
+        qvm->directlyRun(srcprog);
         auto r1 = qvm->PMeasure_no_index(q);
-        QProg out_prog = qcodar_match(prog, q, qvm, SIMPLE_TYPE, 2, 3, 5);
+        QProg outprog = qcodar_match(srcprog, q, qvm, SIMPLE_TYPE, 2, 3, 5);
 
-        qvm->directlyRun(out_prog);
+        qvm->directlyRun(outprog);
         auto r2 = qvm->PMeasure_no_index(q);
 
         int size = std::min(r1.size(), r2.size());
@@ -164,6 +180,17 @@
         return 0;
     }
 
+具体步骤如下:
+
+ - 首先创建量子虚拟机、量子寄存器、经典寄存器
+ 
+ - 编写量子程序 ``srcprog`` ，对该量子程序进行概率测量得到结果 ``r1``
+ 
+ - 接着调用 ``qcodar_match()`` 对 ``srcprog`` 进行符合特定物理结构的线路映射，得到适配特定物理结构的量子程序 ``outprog``
+
+ - 对量子程序 ``outprog`` 进行概率测量得到结果 ``r2``
+ 
+ - 由于量子程序映射只是对原线路增加额外的 ``SWAP`` 操作，以适配物理拓扑结构，并不影响线路的结构。所以对比结果 ``r1`` 和 ``r2`` ，如果结果一致，则线路映射正确。
 
 运行结果如下：
 
